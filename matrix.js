@@ -4,7 +4,7 @@ var Matrix = module.exports = function(){
     var me = this;
     me.stream = fs.createWriteStream('/dev/spidev0.0');
     me.displaySequence([{
-        text:'scroll controller enabled :-)',
+        text:'scroll control enabled :-)',
         speed:50
     },{
         text:'ready',

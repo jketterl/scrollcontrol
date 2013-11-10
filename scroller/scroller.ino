@@ -3,38 +3,58 @@
 #include <SPI.h>
 #include <SPIRead.h>
 
-int i = 0;
-int wd;
+byte screenCount;
+
+struct Screen {
+  byte speed;
+  char* message;
+};
+
+Screen* screens;
 
 void setup () {
-  //Serial.begin(9600);
   SPIReader.begin();
   HT1632.begin(A2, A0, A1, A3, A4, A5);
   HT1632.drawTarget(BUFFER_BOARD(1));
+  
+  screenCount = 1;
+  screens = (Screen*) malloc(sizeof(Screen));
+  screens[0].speed = 10;
+  screens[0].message = "booting";
 }
 
-char* message = "ready";
-
 void loop () {
-  wd = HT1632.getTextWidth(message, FONT_7X5_WIDTH, FONT_7X5_HEIGHT);
-  
-  while (!SPIReader.available()) {
-    if (wd > OUT_SIZE) {
-      i = (i+1)%(wd + OUT_SIZE);
-    } else {
-      i = ((OUT_SIZE + wd) / 2) + 1;
-    }
+  int pos = 0, i = 0, wd = 0;
+  Screen current;
 
+  while (!SPIReader.available()) {
+    if (i == 0) {
+      current = screens[pos++];
+      pos %= screenCount;
+    }
+    
+    wd = HT1632.getTextWidth(current.message, FONT_7X5_WIDTH, FONT_7X5_HEIGHT);
+
+    if (++i > wd + OUT_SIZE) i = 0;
+    
     HT1632.clear();
-    HT1632.drawText(message, OUT_SIZE - i, 0, FONT_7X5, FONT_7X5_WIDTH, FONT_7X5_HEIGHT, FONT_7X5_STEP_GLYPH);
+    HT1632.drawText(current.message, OUT_SIZE - i, 0, FONT_7X5, FONT_7X5_WIDTH, FONT_7X5_HEIGHT, FONT_7X5_STEP_GLYPH);
     HT1632.render();
     
-    delay(100);
+    delay(1000 / max(1, current.speed));
   }
   
-  free(message);
-  message = (char*) malloc(100);
-  int len = SPIReader.readBytesUntil('\n', message, 100);
-  message[len] = 0x00;
-  //Serial.println(message);
+  for (int i = 0; i < screenCount; i++) free(screens[i].message);
+  free(screens);
+  screenCount = SPIReader.read();
+  
+  screens = (Screen *) malloc(sizeof(Screen) * screenCount);
+  for (int i = 0; i < screenCount; i++) {
+    byte header[3];
+    SPIReader.readBytes((char*)header, 3);
+    screens[i].speed = header[1];
+    screens[i].message = (char*) malloc(header[2] + 1);
+    SPIReader.readBytes(screens[i].message, header[2]);
+    screens[i].message[header[2]] = 0x00;
+  }
 }
