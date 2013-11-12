@@ -15,7 +15,7 @@ Ext.require([
                 region:'center',
             });
 
-            this.items = [stepEditor, Ext.create('Ext.grid.Panel', {
+            var grid = Ext.create('Ext.grid.Panel', {
                 region:'west',
                 width:200,
                 split:true,
@@ -31,12 +31,17 @@ Ext.require([
                         text:'+',
                         flex:1,
                         handler:function(){
-                            stepStore.add(Ext.create('Matrix.Step'));
+                            var step = Ext.create('Matrix.Step');
+                            stepStore.add(step);
+                            grid.getSelectionModel().select(step);
                         }
                     },{
                         xtype:'button',
                         text:'-',
-                        flex:1
+                        flex:1,
+                        handler:function(){
+                            stepStore.remove(grid.getSelectionModel().getSelection());
+                        }
                     }]
                 },{
                     dock:'top',
@@ -62,7 +67,9 @@ Ext.require([
                         stepEditor.loadStep(selected[0]);
                     }
                 }
-            })];
+            });
+
+            this.items = [stepEditor, grid];
             
             this.callParent(arguments);
         },
