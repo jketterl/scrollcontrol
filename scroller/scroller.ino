@@ -3,13 +3,14 @@
 #include <SPI.h>
 #include <SPIRead.h>
 
-byte screenCount;
+#define ACT_LED 6
 
 struct Screen {
   byte speed;
   char* message;
 };
 
+byte screenCount;
 Screen* screens;
 
 void setup () {
@@ -21,9 +22,13 @@ void setup () {
   screens = (Screen*) malloc(sizeof(Screen));
   screens[0].speed = 10;
   screens[0].message = "booting";
+  
+  pinMode(ACT_LED, OUTPUT);
 }
 
 void loop () {
+  digitalWrite(ACT_LED, LOW);
+  
   int pos = 0, i = 0, wd = 0;
   Screen current;
 
@@ -43,6 +48,8 @@ void loop () {
     
     delay(1000 / max(1, current.speed));
   }
+  
+  digitalWrite(ACT_LED, HIGH);
   
   for (int i = 0; i < screenCount; i++) free(screens[i].message);
   free(screens);
