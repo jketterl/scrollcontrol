@@ -7,7 +7,7 @@ app.use(express.bodyParser());
 var matrix = new (require('./matrix'))();
 
 app.post('/direct', function(req, res){
-    matrix.displaySequence([req.body]);
+    matrix.displaySequence(req.body);
     res.json({status:'OK'});
 });
 
