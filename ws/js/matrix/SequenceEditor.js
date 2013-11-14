@@ -13,6 +13,17 @@ Ext.require([
 
             var stepEditor = Ext.create('Matrix.StepEditor', {
                 region:'center',
+                dockedItems:[{
+                    dock:'bottom',
+                    xtype:'toolbar',
+                    items:[{
+                        xtype:'button',
+                        text:'Speichern',
+                        handler:function(){
+                            me.sequence.save();
+                        }
+                    }]
+                }]
             });
 
             var grid = Ext.create('Ext.grid.Panel', {
