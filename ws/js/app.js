@@ -6,6 +6,8 @@ var app = function(){
         }
     });
 
+    Ext.tip.QuickTipManager.init();
+    
     var content = Ext.create('Ext.container.Container', {
         layout:'card',
         region:'center',
@@ -21,10 +23,12 @@ var app = function(){
     });
 
     var grid = Ext.create('Matrix.sequence.Grid', {
-        title:'Stored Sequences'
+        title:'Stored Sequences',
+        edit:function(sequence){
+            editor.loadSequence(sequence);
+            content.show(editor);
+        }
     });
-
-
 
     var viewport = Ext.create('Ext.Viewport', {
         layout:'border',

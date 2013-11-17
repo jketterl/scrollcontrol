@@ -38,6 +38,21 @@ app.put('/sequence/:id', function(req, res){
         })
     });
 });
+app.delete('/sequence/:id', function(req, res){
+    Sequence.findOne({"_id":req.params.id}, function(err, sequence){
+        if (err) {
+            console.error(err.stack);
+            return res.json({success:false}, 500);
+        }
+        sequence.remove(function(err){
+            if (err) {
+                console.error(err.stack);
+                return res.json({success:false}, 500);
+            }
+            res.json({success:true});
+        });
+    });
+});
 app.get('/sequence', function(req, res){
     Sequence.find(function(err, result){
         if (err) {

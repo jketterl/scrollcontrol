@@ -15,5 +15,10 @@ Ext.define('Matrix.Sequence', {
         reader:{
             root:'data'
         }
+    },
+    play:function(){
+        Ext.Ajax.request({
+            url:'/sequence/' + this.get('id') + '/start'
+        });
     }
 });
