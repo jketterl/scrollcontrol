@@ -4,13 +4,16 @@ Ext.define('Matrix.Sequence', {
         'Matrix.SequenceWriter'
     ],
     fields:[
-        //{name:'id', type:'integer'},
+        {name:'id', type:'String', mapping:'_id'},
         {name:'name', type:'string'}
     ],
     hasMany:{model:'Matrix.Step', name:'steps'},
     proxy:{
         type:'rest',
         url:'/sequence',
-        writer:'sequencewriter'
+        writer:'sequencewriter',
+        reader:{
+            root:'data'
+        }
     }
 });

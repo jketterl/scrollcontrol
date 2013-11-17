@@ -9,7 +9,6 @@ Ext.require([
             var me = this;
 
             this.sequence = Ext.create('Matrix.Sequence');
-            var stepStore = this.sequence.steps();
 
             var stepEditor = Ext.create('Matrix.StepEditor', {
                 region:'center',
@@ -20,17 +19,23 @@ Ext.require([
                         xtype:'button',
                         text:'Speichern',
                         handler:function(){
-                            me.sequence.save();
+                            me.sequence.save({
+                                callback:function(recs, op, success){
+                                    if (!success) return;
+                                    me.sequence.commit();
+                                    me.sequence.steps().commitChanges();
+                                }
+                            });
                         }
                     }]
                 }]
             });
 
-            var grid = Ext.create('Ext.grid.Panel', {
+            me.grid = Ext.create('Ext.grid.Panel', {
                 region:'west',
                 width:200,
                 split:true,
-                store:stepStore,
+                store:this.sequence.steps(),
                 columns:[
                     {header:'text', dataIndex:'text', flex:1}
                 ],
@@ -43,15 +48,15 @@ Ext.require([
                         flex:1,
                         handler:function(){
                             var step = Ext.create('Matrix.Step');
-                            stepStore.add(step);
-                            grid.getSelectionModel().select(step);
+                            me.sequence.steps().add(step);
+                            me.grid.getSelectionModel().select(step);
                         }
                     },{
                         xtype:'button',
                         text:'-',
                         flex:1,
                         handler:function(){
-                            stepStore.remove(grid.getSelectionModel().getSelection());
+                            me.sequence.steps().remove(me.grid.getSelectionModel().getSelection());
                         }
                     }]
                 },{
@@ -63,7 +68,7 @@ Ext.require([
                         flex:1,
                         handler:function(){
                             var steps = [];
-                            stepStore.each(function(step){
+                            me.sequence.steps().each(function(step){
                                 steps.push({text:step.get('text'), speed:step.get('speed')});
                             });
                             Ext.Ajax.request({
@@ -80,9 +85,13 @@ Ext.require([
                 }
             });
 
-            this.items = [stepEditor, grid];
+            this.items = [stepEditor, me.grid];
             
             this.callParent(arguments);
         },
+        loadSequence:function(sequence){
+            this.sequence = sequence;
+            this.grid.getView().bindStore(sequence.steps());
+        }
     });
 });
