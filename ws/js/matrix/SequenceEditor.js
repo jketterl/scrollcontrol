@@ -33,6 +33,7 @@ Ext.require([
 
             me.grid = Ext.create('Ext.grid.Panel', {
                 region:'west',
+                title:'Schritte',
                 width:200,
                 split:true,
                 store:this.sequence.steps(),
