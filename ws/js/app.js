@@ -42,7 +42,18 @@ var app = function(){
                     });
                 }
             }]},
-            {header:'Name', dataIndex:'name', flex:3}
+            {
+                header:'Text',
+                dataIndex:'steps',
+                flex:4,
+                renderer:function(v, r, record){
+                    var texts = [];
+                    record.steps().each(function(){
+                        texts.push(this.get('text'));
+                    });
+                    return texts.join(' // ');
+                }
+            }
         ],
         store:{
             model:'Matrix.Sequence',
