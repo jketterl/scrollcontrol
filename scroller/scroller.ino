@@ -26,19 +26,21 @@ void setup () {
   pinMode(ACT_LED, OUTPUT);
 }
 
+int i = 0;
+
 void loop () {
   digitalWrite(ACT_LED, LOW);
   
-  int pos = 0, i = 0, wd = 0;
+  int pos = 0, /*i = 0,*/ wd = 0;
+  i=0;
   Screen current;
 
   while (!SPIReader.available()) {
     if (i == 0) {
       current = screens[pos++];
       pos %= screenCount;
+      wd = HT1632.getTextWidth(current.message, FONT_7X5_WIDTH, FONT_7X5_HEIGHT);
     }
-    
-    wd = HT1632.getTextWidth(current.message, FONT_7X5_WIDTH, FONT_7X5_HEIGHT);
 
     if (++i > wd + OUT_SIZE) i = 0;
     
@@ -51,17 +53,17 @@ void loop () {
   
   digitalWrite(ACT_LED, HIGH);
   
-  for (int i = 0; i < screenCount; i++) free(screens[i].message);
+  for (int k = 0; k < screenCount; k++) free(screens[k].message);
   free(screens);
   screenCount = SPIReader.read();
   
   screens = (Screen *) malloc(sizeof(Screen) * screenCount);
-  for (int i = 0; i < screenCount; i++) {
+  for (int k = 0; k < screenCount; k++) {
     byte header[3];
     SPIReader.readBytes((char*)header, 3);
-    screens[i].speed = header[1];
-    screens[i].message = (char*) malloc(header[2] + 1);
-    SPIReader.readBytes(screens[i].message, header[2]);
-    screens[i].message[header[2]] = 0x00;
+    screens[k].speed = header[1];
+    screens[k].message = (char*) malloc(header[2] + 1);
+    SPIReader.readBytes(screens[k].message, header[2]);
+    screens[k].message[header[2]] = 0x00;
   }
 }
