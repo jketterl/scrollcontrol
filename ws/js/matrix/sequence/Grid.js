@@ -12,7 +12,15 @@ Ext.define('Matrix.sequence.Grid', {
             xtype:'toolbar',
             items:[{
                 xtype:'button',
+                text:'Neue Sequenz',
+                icon:'img/icons/layout_add.png',
+                handler:function(){
+                    me.edit(Ext.create('Matrix.Sequence'));
+                }
+            },{
+                xtype:'button',
                 text:'Starten',
+                icon:'img/icons/control_play_blue.png',
                 handler:function(){
                     var record = me.getSelectionModel().getSelection()[0];
                     if (!record) return;
@@ -21,6 +29,7 @@ Ext.define('Matrix.sequence.Grid', {
             },{
                 xtype:'button',
                 text:'Bearbeiten',
+                icon:'img/icons/layout_edit.png',
                 handler:function(){
                     var record = me.getSelectionModel().getSelection()[0];
                     if (!record) return;
@@ -29,6 +38,7 @@ Ext.define('Matrix.sequence.Grid', {
             },{
                 xtype:'button',
                 text:'Löschen',
+                icon:'img/icons/layout_delete.png',
                 handler:function(){
                     var record = me.getSelectionModel().getSelection()[0];
                     if (!record) return;
@@ -46,7 +56,7 @@ Ext.define('Matrix.sequence.Grid', {
         }];
 
         me.columns = [
-            {header:'ID', dataIndex:'id', flex:1},
+            {header:'ID', dataIndex:'id', flex:1, hidden:true},
             {header:'Aktionen', xtype:'actioncolumn', items:[{
                 icon:'img/icons/layout_edit.png',
                 tooltip:'Bearbeiten',
