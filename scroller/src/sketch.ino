@@ -10,6 +10,12 @@ struct Screen {
   char* message;
 };
 
+struct Animation {
+  byte type;
+  byte direction;
+  byte speed;
+};
+
 byte screenCount;
 Screen* screens;
 
@@ -20,7 +26,7 @@ void setup () {
   screenCount = 1;
   screens = (Screen*) malloc(sizeof(Screen));
   screens[0].speed = 10;
-  screens[0].message = "booting";
+  screens[0].message = "booting...";
   
   pinMode(ACT_LED, OUTPUT);
 }
@@ -67,5 +73,16 @@ void loop () {
     screens[k].message = (char*) malloc(header[2] + 1);
     SPIReader.readBytes(screens[k].message, header[2]);
     screens[k].message[header[2]] = 0x00;
+
+    byte animCount = SPIReader.read();
+
+    Animation anim[animCount];
+    byte buf[3];
+    for (int l = 0; l < animCount; l++) {
+        SPIReader.readBytes((char*) buf, 3);
+        anim[l].type = buf[0];
+        anim[l].direction = buf[1];
+        anim[l].speed = buf[2];
+    }
   }
 }
