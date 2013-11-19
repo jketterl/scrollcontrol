@@ -68,13 +68,9 @@ Ext.require([
                         text:'Upload to display',
                         flex:1,
                         handler:function(){
-                            var steps = [];
-                            me.sequence.steps().each(function(step){
-                                steps.push({text:step.get('text'), speed:step.get('speed')});
-                            });
                             Ext.Ajax.request({
                                 url:'/direct',
-                                jsonData:steps
+                                jsonData:Matrix.Sequence.getProxy().getWriter().getRecordData(me.sequence)
                             });
                         }
                      }]
