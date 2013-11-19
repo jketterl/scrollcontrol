@@ -8,15 +8,6 @@ var app = function(){
 
     Ext.tip.QuickTipManager.init();
     
-    var content = Ext.create('Ext.container.Container', {
-        layout:'card',
-        region:'center',
-        show:function(component){
-            this.add(component);
-            this.getLayout().setActiveItem(component);
-        }
-    });
-
     var editor =  Ext.create('Matrix.SequenceEditor', {
         title:'Sequence Editor',
         region:'center'
@@ -27,6 +18,16 @@ var app = function(){
         edit:function(sequence){
             editor.loadSequence(sequence);
             content.show(editor);
+        }
+    });
+
+    var content = Ext.create('Ext.container.Container', {
+        layout:'card',
+        region:'center',
+        items:[grid],
+        show:function(component){
+            this.add(component);
+            this.getLayout().setActiveItem(component);
         }
     });
 
