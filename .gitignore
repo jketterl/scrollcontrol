@@ -2,3 +2,5 @@ node_modules
 ext*.zip
 ws/js/ext*
 ws/img
+scroller/lib
+scroller/.build
