@@ -9,7 +9,8 @@ app.use(express.bodyParser());
 var matrix = new (require('./matrix'))();
 
 app.post('/direct', function(req, res){
-    matrix.displaySequence(req.body);
+    var sequence = new Sequence(req.body);
+    matrix.displaySequence(sequence);
     res.json({success:true});
 });
 app.post('/sequence', function(req, res){
@@ -68,7 +69,7 @@ app.get('/sequence/:id/start', function(req, res){
             console.error(err.stack);
             return res.json({success:false}, 500);
         }
-        matrix.displaySequence(sequence.steps);
+        matrix.displaySequence(sequence);
         res.json({success:true});
     });
 });
