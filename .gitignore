@@ -4,3 +4,4 @@ ws/js/ext*
 ws/img
 scroller/lib
 scroller/.build
+*.swp

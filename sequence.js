@@ -13,8 +13,8 @@ var schema = mongoose.Schema({
     }]
 });
 
-var directions = ['LEFT', 'RIGHT', 'TOP', 'BOTTOM'];
 var types = ['SCROLL_IN', 'SCROLL_OUT', 'HOLD']; 
+var directions = ['LEFT', 'RIGHT', 'TOP', 'BOTTOM'];
 
 schema.methods.getBinary = function(){
     var me = this;
