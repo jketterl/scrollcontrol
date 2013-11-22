@@ -92,7 +92,11 @@ Ext.define('Matrix.StepEditor', {
                 },{
                     xtype:'button',
                     icon:'img/icons/delete.png',
-                    tooltip:'Animation entfernen'
+                    tooltip:'Animation entfernen',
+                    handler:function(){
+                        var record = me.grid.getSelectionModel().getSelection()[0];
+                        me.step.animations().remove(record);
+                    }
                 }]
             }]
         });
