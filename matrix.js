@@ -54,7 +54,7 @@ Matrix.prototype.displaySequence = function(sequence){
         me.stream.write(chunk);
         if (!finished) setTimeout(function(){
             write(end);
-        }, 10);
+        }, 100);
     };
 
     write(0);
