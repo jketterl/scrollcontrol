@@ -54,7 +54,6 @@ schema.methods.getBinary = function(){
         });
     });
     var binary = Buffer.concat(buffers);
-    console.info(binary);
     return binary;
 };
 
