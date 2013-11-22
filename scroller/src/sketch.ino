@@ -213,7 +213,7 @@ void setup () {
   screens[0].animations = (Animation**) malloc(sizeof(Animation*) * 3);
   screens[0].animations[0] = new ScrollInAnimation(3, 1);
   screens[0].animations[1] = new HoldAnimation(0, 5);
-  screens[0].animations[2] = new ScrollOutAnimation(3, 10);
+  screens[0].animations[2] = new ScrollOutAnimation(2, 1);
   
   pinMode(ACT_LED, OUTPUT);
   digitalWrite(ACT_LED, HIGH);
@@ -262,7 +262,7 @@ void loop () {
   
   for (int k = 0; k < screenCount; k++) {
     free(screens[k].message);
-    for (int l = 0; l < screens[l].animCount; l++) {
+    for (int l = 0; l < screens[k].animCount; l++) {
       free(screens[k].animations[l]);
     }
     free(screens[k].animations);
