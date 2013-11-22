@@ -1,6 +1,7 @@
 var express = require('express'),
     mongoose = require('mongoose'),
-    Sequence = require('./sequence');
+    Sequence = require('./sequence'),
+    child_process = require('child_process');
 
 var app = express();
 app.use(express.static(__dirname + '/ws'));
@@ -74,13 +75,27 @@ app.get('/sequence/:id/start', function(req, res){
     });
 });
 
-mongoose.connect('mongodb://localhost/scrollcontrol');
-var db = mongoose.connection;
-db.on('open', function(){
+var startServer = function(){
     app.listen(3000, function(){
         console.info('Server started.');
+        matrix.displayInitialSequence();
     });
-});
+};
+
+mongoose.connect('mongodb://localhost/scrollcontrol');
+var db = mongoose.connection;
+db.on('open', startServer);
 db.on('error', function(err){
-    console.error(err.stack);
+    console.warn('database error');
+    matrix.displayMessage('database repair');
+    var repair = child_process.spawn(__dirname + '/dbrepair.sh');
+    repair.on('exit', function(rc){
+        if (rc != 0) {
+            matrix.displayMessage('database error');
+            process.exit(1);
+        }
+        console.warn('database repaired.');
+        matrix.displayMessage('database ok');
+        mongoose.connect('mongodb://localhost/scrollcontrol');
+    });
 });

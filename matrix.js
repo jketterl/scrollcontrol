@@ -4,7 +4,10 @@ var fs = require('fs'),
 var Matrix = module.exports = function(){
     var me = this;
     me.stream = fs.createWriteStream('/dev/spidev0.0');
-    me.displaySequence(new Sequence({steps:[{
+}
+
+Matrix.prototype.displayInitialSequence = function(){
+    this.displaySequence(new Sequence({steps:[{
         text:'scroll control enabled :-)',
         animations:[{
             type:'SCROLL_IN',
@@ -62,4 +65,17 @@ Matrix.prototype.displaySequence = function(sequence){
     };
 
     write(0);
-}
+};
+
+Matrix.prototype.displayMessage = function(message) {
+    var sequence = new Sequence({
+        steps:[{
+            text:message,
+            animations:[{
+                type:'HOLD',
+                speed:100
+            }]
+        }]
+    });
+    this.displaySequence(sequence);
+};
