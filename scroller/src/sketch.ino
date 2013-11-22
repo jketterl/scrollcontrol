@@ -198,7 +198,6 @@ void HoldAnimation::sleep() {
 }
 
 struct Screen {
-  byte speed;
   char* message;
   byte animCount;
   Animation** animations;
@@ -213,7 +212,6 @@ void setup () {
   
   screenCount = 1;
   screens = (Screen*) malloc(sizeof(Screen));
-  screens[0].speed = 10;
   screens[0].message = "booting...";
 
   screens[0].animCount = 3;
@@ -225,13 +223,12 @@ void setup () {
   pinMode(ACT_LED, OUTPUT);
 }
 
-int i = 0;
+int i, pos, wd;
+Coordinate p;
+Screen current;
 
 void loop () {
-  int pos = 0, wd = 0;
-  i = -1;
-  Coordinate p = { 0, 0 };
-  Screen current;
+  pos = 0; wd = 0; i = -1;
 
   digitalWrite(ACT_LED, LOW);
 
@@ -280,12 +277,11 @@ void loop () {
   
   screens = (Screen *) malloc(sizeof(Screen) * screenCount);
   for (int k = 0; k < screenCount; k++) {
-    byte header[3];
-    SPIReader.readBytes((char*)header, 3);
-    screens[k].speed = header[1];
-    screens[k].message = (char*) malloc(header[2] + 1);
-    SPIReader.readBytes(screens[k].message, header[2]);
-    screens[k].message[header[2]] = 0x00;
+    byte header[2];
+    SPIReader.readBytes((char*)header, 2);
+    screens[k].message = (char*) malloc(header[1] + 1);
+    SPIReader.readBytes(screens[k].message, header[1]);
+    screens[k].message[header[1]] = 0x00;
 
     while(!SPIReader.available());
     screens[k].animCount = SPIReader.read();

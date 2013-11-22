@@ -4,7 +4,6 @@ var schema = mongoose.Schema({
     name:String,
     steps:[{
         text:String,
-        speed:Number,
         animations:[{
             type:{type:String},
             direction:String,
@@ -24,16 +23,14 @@ schema.methods.getBinary = function(){
     buf[0] = me.steps.length;
     var buffers = [buf];
     me.steps.forEach(function(line){
-        // 3-byte header for each step
-        var buf = new Buffer(line.text.length + 3);
+        // 2-byte header for each step
+        var buf = new Buffer(line.text.length + 2);
         // type - only 0 is supported for now
         buf[0] = 0;
-        // speed
-        buf[1] = Math.max(0, Math.min(255, line.speed));
         // length of following text
-        buf[2] = line.text.length;
+        buf[1] = line.text.length;
         // text
-        buf.write(line.text, 3);
+        buf.write(line.text, 2);
         buffers.push(buf);
 
         var animations = line.animations || [];

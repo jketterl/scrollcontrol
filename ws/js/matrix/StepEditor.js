@@ -27,13 +27,6 @@ Ext.define('Matrix.StepEditor', {
             xtype:'textfield',
             name:'text',
             fieldLabel:'Scroll text'
-        },{
-            xtype:'slider',
-            name:'speed',
-            fieldLabel:'Scroll speed',
-            width:400,
-            value:10,
-            maxValue:255
         }]
 
         me.grid = Ext.create('Ext.grid.Panel', {
