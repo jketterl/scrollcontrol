@@ -268,7 +268,7 @@ void loop () {
   for (int k = 0; k < screenCount; k++) {
     free(screens[k].message);
     for (int l = 0; l < screens[k].animCount; l++) {
-      free(screens[k].animations[l]);
+      delete(screens[k].animations[l]);
     }
     free(screens[k].animations);
   }
