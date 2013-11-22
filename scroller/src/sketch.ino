@@ -90,19 +90,25 @@ Coordinate ScrollInAnimation::step(Coordinate start) {
 Coordinate ScrollInAnimation::init(int width) {
   finished = false;
   Coordinate result = {0,0};
-  target = 0;
+  int middle = (TOTAL_WIDTH - width) / 2;
   switch (direction) {
     case 0:
       result.x = -width;
+      target = middle;
       break;
     case 1:
       result.x = TOTAL_WIDTH + 1;
+      target = middle;
       break;
     case 2:
+      result.x = middle;
       result.y = -TOTAL_HEIGHT;
+      target = 0;
       break;
     case 3:
+      result.x = middle;
       result.y = TOTAL_HEIGHT + 1;
+      target = 0;
       break;
   }
   return result;
@@ -146,7 +152,8 @@ Coordinate ScrollOutAnimation::step(Coordinate start) {
 
 Coordinate ScrollOutAnimation::init(int width) {
   finished = false;
-  Coordinate result = {0,0};
+  int middle = (TOTAL_WIDTH - width) / 2;
+  Coordinate result = {middle,0};
   target = 0;
   switch (direction) {
     case 0:
@@ -177,7 +184,7 @@ class HoldAnimation : public Animation {
 
 Coordinate HoldAnimation::init(int width) {
   steps = 0; finished = false;
-  Coordinate result = { 0, 0 };
+  Coordinate result = { (TOTAL_WIDTH - width) / 2, 0 };
   return result;
 }
 
@@ -212,7 +219,7 @@ void setup () {
   screens[0].animCount = 3;
   screens[0].animations = (Animation**) malloc(sizeof(Animation*) * 3);
   screens[0].animations[0] = new ScrollInAnimation(3, 1);
-  screens[0].animations[1] = new HoldAnimation(0, 5);
+  screens[0].animations[1] = new HoldAnimation(0, 50);
   screens[0].animations[2] = new ScrollOutAnimation(2, 1);
   
   pinMode(ACT_LED, OUTPUT);
