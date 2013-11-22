@@ -223,7 +223,6 @@ void setup () {
   screens[0].animations[2] = new ScrollOutAnimation(2, 1);
   
   pinMode(ACT_LED, OUTPUT);
-  digitalWrite(ACT_LED, HIGH);
 }
 
 int i = 0;
@@ -234,9 +233,10 @@ void loop () {
   Coordinate p = { 0, 0 };
   Screen current;
 
+  digitalWrite(ACT_LED, LOW);
+
   while (!SPIReader.available()) {
     if (i == -1) {
-      digitalWrite(ACT_LED, LOW);
       current = screens[pos++];
       pos %= screenCount;
       wd = HT1632.getTextWidth(current.message, FONT_7X5_WIDTH, FONT_7X5_HEIGHT);
@@ -260,13 +260,14 @@ void loop () {
     if (current.animations[i]->isFinished()) {
       if (++i >= current.animCount) {
         i = -1;
-        //digitalWrite(ACT_LED, HIGH);
       } else {
         p = current.animations[i]->init(wd);
       }
     }
   }
   
+  digitalWrite(ACT_LED, HIGH);
+
   for (int k = 0; k < screenCount; k++) {
     free(screens[k].message);
     for (int l = 0; l < screens[k].animCount; l++) {
@@ -286,6 +287,7 @@ void loop () {
     SPIReader.readBytes(screens[k].message, header[2]);
     screens[k].message[header[2]] = 0x00;
 
+    while(!SPIReader.available());
     screens[k].animCount = SPIReader.read();
 
     screens[k].animations = (Animation**) malloc(sizeof(Animation*) * screens[k].animCount);
