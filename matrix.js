@@ -51,10 +51,14 @@ Matrix.prototype.displaySequence = function(sequence){
             finished = true;
         }
         var chunk = buf.slice(start, end);
-        me.stream.write(chunk);
-        if (!finished) setTimeout(function(){
-            write(end);
-        }, 100);
+        var next = function(){
+            setTimeout(function(){
+                write(end);
+            }, 100);
+        };
+        var flushed = me.stream.write(chunk);
+        if (finished) return;
+        if (flushed) next(); else me.stream.once('drain', next);
     };
 
     write(0);
