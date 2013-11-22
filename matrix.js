@@ -41,7 +41,7 @@ var Matrix = module.exports = function(){
 Matrix.prototype.displaySequence = function(sequence){
     var me = this,
         buf = sequence.getBinary(),
-        chunkSize = 20;
+        chunkSize = 60;
 
     var write = function(start) {
         var end = start + chunkSize;
