@@ -86,6 +86,10 @@ Ext.define('Matrix.sequence.Grid', {
             }
         ];
 
+        me.on('itemdblclick', function(grid, sequence) {
+            sequence.play();
+        });
+
         me.callParent(arguments);
         me.on('activate', function(){
             me.getStore().load();
