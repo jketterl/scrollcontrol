@@ -7,11 +7,11 @@ var app = express();
 app.use(express.static(__dirname + '/ws'));
 app.use(express.bodyParser());
 
-var matrix = new (require('./matrix'))();
+var output = new (require('./output'))();
 
 app.post('/direct', function(req, res){
     var sequence = new Sequence(req.body);
-    matrix.displaySequence(sequence);
+    output.displaySequence(sequence);
     res.json({success:true});
 });
 app.post('/sequence', function(req, res){
@@ -70,7 +70,7 @@ app.get('/sequence/:id/start', function(req, res){
             console.error(err.stack);
             return res.json({success:false}, 500);
         }
-        matrix.displaySequence(sequence);
+        output.displaySequence(sequence);
         res.json({success:true});
     });
 });
@@ -78,7 +78,7 @@ app.get('/sequence/:id/start', function(req, res){
 var startServer = function(){
     app.listen(3000, function(){
         console.info('Server started.');
-        matrix.displayInitialSequence();
+        output.displayInitialSequence();
     });
 };
 
@@ -87,15 +87,15 @@ var db = mongoose.connection;
 db.on('open', startServer);
 db.on('error', function(err){
     console.warn('database error');
-    matrix.displayMessage('database repair');
+    output.displayMessage('database repair');
     var repair = child_process.spawn(__dirname + '/dbrepair.sh');
     repair.on('exit', function(rc){
         if (rc != 0) {
-            matrix.displayMessage('database error');
+            output.displayMessage('database error');
             process.exit(1);
         }
         console.warn('database repaired.');
-        matrix.displayMessage('database ok');
+        output.displayMessage('database ok');
         mongoose.connect('mongodb://localhost/scrollcontrol');
     });
 });
