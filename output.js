@@ -23,6 +23,10 @@ var Output = function(){
             setTimeout(function(){
                 connect(ip);
             }, 10000);
+
+            var index = me.sockets.indexOf(sock);
+            if (index < 0) return;
+            me.sockets.splice(index, 1);
         });
     };
 
