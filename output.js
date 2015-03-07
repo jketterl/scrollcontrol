@@ -1,4 +1,5 @@
-var initialSequence = require('./initialSequence'),
+var Sequence = require('./sequence'),
+    initialSequence = require('./initialSequence'),
     Matrix = require('./matrix'),
     net = require('net');
 
@@ -44,7 +45,7 @@ Output.prototype.displaySequence = function(sequence) {
 };
 
 Output.prototype.displayMessage = function(message) {
-    this.displaySequenece(new Sequence({
+    this.displaySequence(new Sequence({
         steps:[{
             text:message,
             animations:[{
