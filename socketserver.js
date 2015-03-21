@@ -5,10 +5,13 @@ var SocketServer = function() {
     me.sockets = [];
     var server = net.createServer(function(socket){
         me.sockets.push(socket);
-        socket.on('end', function(){
+        socket.on('close', function(){
             var index = me.sockets.indexOf(socket);
             if (index < 0) return;
             me.sockets.splice(index, 1);
+        });
+        socket.on('error', function(err) {
+            console.error('socket error:\n' + err.stack);
         });
         if (me.sequence) socket.write(me.sequence.getBinary());
     });
