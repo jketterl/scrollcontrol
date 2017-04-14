@@ -6,15 +6,17 @@ var Sequence = require('./sequence'),
 
 var Output = function(){
     var me = this;
-    me.matrix = new Matrix();
-    me.socketServer = new SocketServer();
+    me.outputs = [
+        new SocketServer()
+    ];
 };
 
 module.exports = Output;
 
 Output.prototype.displaySequence = function(sequence) {
-    this.matrix.displaySequence(sequence);
-    this.socketServer.displaySequence(sequence);
+    this.outputs.forEach(function(output) {
+        output.displaySequence(sequence);
+    });
 };
 
 Output.prototype.displayMessage = function(message) {
