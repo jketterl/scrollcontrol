@@ -6,3 +6,4 @@ scroller/lib
 scroller/.build
 *.swp
 .DS_Store
+server/ws/js/ext-4.2.1.883
