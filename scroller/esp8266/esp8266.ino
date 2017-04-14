@@ -1,29 +1,46 @@
 #include <Adafruit_HT1632.h>
+#include <ESP8266WiFi.h>
 
 #include "coordinate.h"
 #include "animation.h"
 #include "screen.h"
 
+#define ACT_LED LED_BUILTIN
+
+const char* ssid     = "djmacgyver.net";
+const char* password = "password";
+
 Adafruit_HT1632LEDMatrix display = Adafruit_HT1632LEDMatrix(D2, D3, D4, D5, D6, D7);
+WiFiClient client;
 
 byte screenCount;
 Screen** screens;
 
 void setup() {
+  Serial.begin(115200);
+  
+  pinMode(ACT_LED, OUTPUT);
+  
+  Serial.println("connecting to wifi...");
+
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) delay(500);
+
+  Serial.println("connected. starting loop!");
+
   display.begin(ADA_HT1632_COMMON_8NMOS);
   display.setTextSize(1);
   display.setTextColor(1);
 
   screenCount = 1;
   screens = new Screen*[1];
-  Animation** animations = new Animation*[3];
-  animations[0] = new ScrollInAnimation(3, 1);
-  animations[1] = new HoldAnimation(0, 50);
-  animations[2] = new ScrollOutAnimation(2, 1);
+  Animation** animations = new Animation*[2];
+  animations[0] = new ScrollOutAnimation(2, 1);
+  animations[1] = new ScrollInAnimation(3, 1);
   char* message = (char*) malloc(11);
-  strcpy(message, "booting...");
+  strcpy(message, "connecting...");
   message[10] = 0;
-  screens[0] = new Screen(message, 3, animations);
+  screens[0] = new Screen(message, 2, animations);
 
 }
 
@@ -35,16 +52,16 @@ Screen* current;
 void loop() {
   pos = 0; wd = 0; i = -1;
 
-  //digitalWrite(ACT_LED, LOW);
-  
+  digitalWrite(ACT_LED, HIGH);
 
-  while (true/*!client.available()*/) {
+  while (!client.available()) {
     if (i == -1) {
       current = screens[pos++];
       pos %= screenCount;
-      //wd = display.getTextWidth(current->message, FONT_7X5_WIDTH, FONT_7X5_HEIGHT);
+      
       // not needed, but need to pass pointers
       int16_t x1, y1;
+      
       uint16_t h;
       display.getTextBounds(current->message, 0, 0, &x1, &y1, &wd, &h);
       i = 0;
@@ -64,7 +81,9 @@ void loop() {
 
     if (current->animations[i]->isFinished()) {
       if (++i >= current->animCount) {
-        //if (!client.connected()) client.connect({192, 168, 99, 1}, 1337);
+        Serial.print("connecting...");
+        if (!client.connected()) client.connect({192, 168, 99, 1}, 1337);
+        Serial.println(" done");
         i = -1;
       } else {
         p = current->animations[i]->init(wd);
@@ -72,9 +91,9 @@ void loop() {
     }
   }
 
-  /*
-  
-  digitalWrite(ACT_LED, HIGH);
+  Serial.println("client got something... starting to parse...");
+
+  digitalWrite(ACT_LED, LOW);
 
   for (int k = 0; k < screenCount; k++) {
     for (int l = 0; l < screens[k]->animCount; l++) {
@@ -124,5 +143,6 @@ void loop() {
      
   }
 
-  */
+  Serial.println("parsing complete.");
+
 }
