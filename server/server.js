@@ -1,11 +1,12 @@
 var express = require('express'),
+    bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
     Sequence = require('./sequence'),
     child_process = require('child_process');
 
 var app = express();
 app.use(express.static(__dirname + '/ws'));
-app.use(express.bodyParser());
+app.use(bodyParser.json());
 
 var output = new (require('./output'))();
 
