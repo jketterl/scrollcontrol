@@ -1,0 +1,24 @@
+{
+  "name": "scrollcontrol",
+  "version": "1.0.0",
+  "description": "Scrollcontroll webserver",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jketterl/scrollcontrol.git"
+  },
+  "author": "Jakob Ketterl <jakob.ketterl@gmx.de>",
+  "license": "LGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/jketterl/scrollcontrol/issues"
+  },
+  "homepage": "https://github.com/jketterl/scrollcontrol#readme",
+  "dependencies": {
+    "express": "^4.15.2",
+    "mongoose": "^4.9.4"
+  }
+}
