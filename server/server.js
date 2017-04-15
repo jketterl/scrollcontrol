@@ -2,13 +2,15 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
     Sequence = require('./sequence'),
-    child_process = require('child_process');
+    child_process = require('child_process'),
+    BroadcastListener = require('./lib/broadcast');
 
 var app = express();
 app.use(express.static(__dirname + '/ws'));
 app.use(bodyParser.json());
 
 var output = new (require('./output'))();
+var bl = new BroadcastListener();
 
 app.post('/direct', function(req, res){
     var sequence = new Sequence(req.body);
