@@ -50,11 +50,20 @@ uint16_t wd;
 Coordinate p;
 Screen* current;
 
+IPAddress getBroadcastAddress() {
+    IPAddress localIP = WiFi.localIP();
+    IPAddress netmask = WiFi.subnetMask();
+    IPAddress broadcast;
+    for (int i = 0; i < 4; i++) {
+        broadcast[i] = localIP[i] | ~ netmask[i];
+    }
+    return broadcast;
+}
+
 void autoConnect() {
   if (client.connected()) return;
 
-  // TODO get broadcast address from somewhere...
-  udp.beginPacket({192, 168, 1, 255}, 1337);
+  udp.beginPacket(getBroadcastAddress(), 1337);
   udp.write("hello scrollcontrol");
   udp.endPacket();
 
