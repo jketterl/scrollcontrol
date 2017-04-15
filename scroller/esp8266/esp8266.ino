@@ -1,5 +1,6 @@
 #include <Adafruit_HT1632.h>
 #include <ESP8266WiFi.h>
+#include <WifiUdp.h>
 
 #include "coordinate.h"
 #include "animation.h"
@@ -12,6 +13,8 @@ const char* password = "password";
 
 Adafruit_HT1632LEDMatrix display = Adafruit_HT1632LEDMatrix(D2, D3, D4, D5, D6, D7);
 WiFiClient client;
+WiFiUDP udp;
+int udpPort = random(1024, 65535);
 
 byte screenCount;
 Screen** screens;
@@ -21,12 +24,10 @@ void setup() {
   
   pinMode(ACT_LED, OUTPUT);
   
-  Serial.println("connecting to wifi...");
-
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) delay(500);
 
-  Serial.println("connected. starting loop!");
+  udp.begin(udpPort);
 
   display.begin(ADA_HT1632_COMMON_8NMOS);
   display.setTextSize(1);
@@ -48,6 +49,21 @@ int i, pos;
 uint16_t wd;
 Coordinate p;
 Screen* current;
+
+void autoConnect() {
+  if (client.connected()) return;
+
+  // TODO get broadcast address from somewhere...
+  udp.beginPacket({192, 168, 1, 255}, 1337);
+  udp.write("hello scrollcontrol");
+  udp.endPacket();
+
+  int len = udp.parsePacket();
+  if (!len) return;
+
+  // TODO get the remote port from the discovery response
+  client.connect(udp.remoteIP(), 1337);
+}
 
 void loop() {
   pos = 0; wd = 0; i = -1;
@@ -81,9 +97,7 @@ void loop() {
 
     if (current->animations[i]->isFinished()) {
       if (++i >= current->animCount) {
-        Serial.print("connecting...");
-        if (!client.connected()) client.connect({192, 168, 99, 1}, 1337);
-        Serial.println(" done");
+        autoConnect();
         i = -1;
       } else {
         p = current->animations[i]->init(wd);
