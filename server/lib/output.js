@@ -1,5 +1,5 @@
 var Sequence = require('./sequence'),
-    initialSequence = require('./initialSequence'),
+    initialSequence = require('../initialSequence'),
     Matrix = require('./matrix'),
     SocketServer = require('./socketserver'),
     net = require('net');

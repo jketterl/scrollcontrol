@@ -1,4 +1,4 @@
-var Sequence = require('./sequence');
+var Sequence = require('./lib/sequence');
 
 var initialSequence = new Sequence({steps:[{
     text:'scroll control enabled :-)',
