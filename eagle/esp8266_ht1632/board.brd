@@ -58,9 +58,9 @@
 </layers>
 <board>
 <plain>
-<wire x1="0" y1="0" x2="42.215" y2="0" width="0" layer="20"/>
-<wire x1="42.215" y1="0" x2="42.215" y2="26.025" width="0" layer="20"/>
-<wire x1="42.215" y1="26.025" x2="0" y2="26.025" width="0" layer="20"/>
+<wire x1="0" y1="0" x2="40.31" y2="0" width="0" layer="20"/>
+<wire x1="40.31" y1="0" x2="40.31" y2="26.025" width="0" layer="20"/>
+<wire x1="40.31" y1="26.025" x2="0" y2="26.025" width="0" layer="20"/>
 <wire x1="0" y1="26.025" x2="0" y2="0" width="0" layer="20"/>
 </plain>
 <libraries>
