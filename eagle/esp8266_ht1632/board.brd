@@ -1614,8 +1614,8 @@ design rules under a new name.</description>
 <wire x1="20.415" y1="6.445" x2="29.21" y2="15.24" width="0.6096" layer="1"/>
 <polygon width="0.254" layer="1" isolate="0.6096" orphans="yes">
 <vertex x="0.635" y="0.635"/>
-<vertex x="0.635" y="-0.635"/>
-<vertex x="36.83" y="-0.635"/>
+<vertex x="0.635" y="25.4"/>
+<vertex x="36.83" y="25.4"/>
 <vertex x="36.83" y="0.635"/>
 </polygon>
 <wire x1="35.56" y1="2.54" x2="35.56" y2="19.05" width="0.254" layer="1"/>
@@ -1634,9 +1634,9 @@ design rules under a new name.</description>
 <wire x1="15.3925" y1="5.2525" x2="15.3925" y2="4.9275" width="0.254" layer="1"/>
 <wire x1="15.3925" y1="4.9275" x2="15.875" y2="4.445" width="0.254" layer="1"/>
 <wire x1="19.47" y1="4.445" x2="20.415" y2="5.39" width="0.254" layer="1"/>
+<wire x1="15.875" y1="4.445" x2="19.47" y2="4.445" width="0.254" layer="1"/>
 <wire x1="15.3925" y1="5.2525" x2="15.3925" y2="9.3525" width="0" layer="19" extent="1-1"/>
 <wire x1="10.63" y1="4.6175" x2="10.63" y2="8.7175" width="0" layer="19" extent="1-1"/>
-<wire x1="15.875" y1="4.445" x2="19.47" y2="4.445" width="0.254" layer="1"/>
 </signal>
 <signal name="+5V">
 <contactref element="SV1" pad="14"/>
@@ -1789,9 +1789,9 @@ design rules under a new name.</description>
 <wire x1="17.78" y1="15.56" x2="17.4625" y2="15.8775" width="0.254" layer="1"/>
 <wire x1="18.7325" y1="6.35" x2="30.415" y2="18.0325" width="0.254" layer="1"/>
 <wire x1="18.09" y1="6.35" x2="16.9925" y2="5.2525" width="0.254" layer="1"/>
-<wire x1="18.09" y1="6.35" x2="16.9925" y2="9.3525" width="0" layer="19" extent="1-1"/>
 <wire x1="18.7325" y1="6.35" x2="18.09" y2="6.35" width="0.254" layer="1"/>
 <wire x1="17.78" y1="10.14" x2="16.9925" y2="9.3525" width="0.254" layer="1"/>
+<wire x1="18.09" y1="6.35" x2="16.9925" y2="9.3525" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="RXD">
 <contactref element="U$1" pad="7"/>
