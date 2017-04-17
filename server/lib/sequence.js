@@ -23,14 +23,14 @@ schema.methods.getBinary = function(){
     buf[0] = me.steps.length;
     var buffers = [buf];
     me.steps.forEach(function(line){
-        // 2-byte header for each step
-        var buf = new Buffer(line.text.length + 2);
+        // 3-byte header for each step
+        var buf = new Buffer(line.text.length + 3);
         // type - only 0 is supported for now
         buf[0] = 0;
         // length of following text
-        buf[1] = line.text.length;
+        buf.writeUInt16BE(line.text.length, 1);
         // text
-        buf.write(line.text, 2);
+        buf.write(line.text, 3);
         buffers.push(buf);
 
         var animations = line.animations || [];
