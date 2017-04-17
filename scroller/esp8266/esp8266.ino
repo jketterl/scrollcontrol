@@ -20,7 +20,7 @@ byte screenCount;
 Screen** screens;
 
 void setup() {
-  Serial.begin(115200);
+  //Serial.begin(115200);
   
   pinMode(ACT_LED, OUTPUT);
   
@@ -114,7 +114,7 @@ void loop() {
     }
   }
 
-  Serial.println("client got something... starting to parse...");
+  //Serial.println("client got something... starting to parse...");
 
   digitalWrite(ACT_LED, LOW);
 
@@ -133,10 +133,10 @@ void loop() {
   screens = new Screen*[screenCount];
   for (int k = 0; k < screenCount; k++) {
     
-    byte header[2];
-    client.readBytes((char*)header, 2);
+    byte header[3];
+    client.readBytes((char*)header, 3);
     
-    byte len = header[1];
+    uint16_t len = (header[1] << 8) | header[2];
     char* copy = (char*) malloc(len + 1);
     client.readBytes(copy, len);
     copy[len] = 0;
@@ -166,6 +166,6 @@ void loop() {
      
   }
 
-  Serial.println("parsing complete.");
+  //Serial.println("parsing complete.");
 
 }
