@@ -32,6 +32,7 @@ void setup() {
   display.begin(ADA_HT1632_COMMON_8NMOS);
   display.setTextSize(1);
   display.setTextColor(1);
+  display.setTextWrap(false);
 
   screenCount = 1;
   screens = new Screen*[1];
@@ -51,13 +52,13 @@ Coordinate p;
 Screen* current;
 
 IPAddress getBroadcastAddress() {
-    IPAddress localIP = WiFi.localIP();
-    IPAddress netmask = WiFi.subnetMask();
-    IPAddress broadcast;
-    for (int i = 0; i < 4; i++) {
-        broadcast[i] = localIP[i] | ~ netmask[i];
-    }
-    return broadcast;
+  IPAddress localIP = WiFi.localIP();
+  IPAddress netmask = WiFi.subnetMask();
+  IPAddress broadcast;
+  for (int i = 0; i < 4; i++) {
+      broadcast[i] = localIP[i] | ~ netmask[i];
+  }
+  return broadcast;
 }
 
 void autoConnect() {
